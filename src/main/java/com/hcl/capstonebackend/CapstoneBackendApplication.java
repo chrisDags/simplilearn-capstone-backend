@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.lang.reflect.Array;
 import java.security.cert.Certificate;
@@ -42,6 +43,7 @@ public class CapstoneBackendApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
 
 
@@ -107,12 +109,12 @@ public class CapstoneBackendApplication implements CommandLineRunner {
 
         User user = User.builder()
                 .username("chris")
-                .password("123")
+                .password(bCryptPasswordEncoder.encode("123"))
                 .build();
 
         User user1 = User.builder()
                 .username("foo")
-                .password("123")
+                .password(bCryptPasswordEncoder.encode("123"))
                 .build();
 
         CartItem cartItem = CartItem.builder()
