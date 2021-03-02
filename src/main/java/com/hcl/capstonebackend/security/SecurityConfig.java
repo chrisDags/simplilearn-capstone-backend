@@ -41,6 +41,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
+    //todo: use the admin role for editing, adding, and deleting albums on the frontend
+    //.hasRole("USER").anyRequest()
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()

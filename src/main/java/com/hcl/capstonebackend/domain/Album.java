@@ -17,6 +17,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Album {
+
+    //todo: add description (lorem ipsum) and seed them within the CommandLineRunner
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
