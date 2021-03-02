@@ -11,12 +11,18 @@ import com.hcl.capstonebackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
+/*
+    todo:  All of this is going to be refactored with all the business logic in their own services
+ */
 
 @CrossOrigin
 @RestController
@@ -30,22 +36,22 @@ public class StoreController {
     @Autowired
     CartItemRepository cartItemRepository;
 
-//    @Autowired
-//    UserRepository userRepository;
 
     @GetMapping("/albums")
-    public Iterable<Album> getAllAlbums(){
+    public Iterable<Album> getAllAlbums() {
         return albumRepository.findAll();
     }
 
+
+    //todo: either handle this on the frontend or find a cleaner way here
     @GetMapping("/albums/{name}")
-    public Iterable<Album> getAlbumByTitle(@PathVariable String name){
+    public Iterable<Album> getAlbumByTitle(@PathVariable String name) {
         Iterable<Album> albums = albumRepository.findAll();
 
         List<Album> albums1 = new ArrayList<>();
 
-        for(Album album : albums){
-            if(album.getTitle().toLowerCase().contains(name.toLowerCase())){
+        for (Album album : albums) {
+            if (album.getTitle().toLowerCase().contains(name.toLowerCase())) {
                 albums1.add(album);
             }
         }
@@ -53,22 +59,23 @@ public class StoreController {
     }
 
     @PostMapping("/loginme")
-    ResponseEntity<?> userLogin(@RequestBody UserDto userDto){
+    ResponseEntity<?> userLogin(@RequestBody UserDto userDto) {
 
         System.out.println(userDto.getUsername());
         boolean result = userRepository.existsUsersByUsername(userDto.getUsername());
 
-        if(result)
+        if (result)
             return new ResponseEntity<>(HttpStatus.OK);
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-
     @GetMapping("/cart")
-    public ResponseEntity<?> getAllInCart(){
+    public ResponseEntity<?> getAllInCart(Principal principal) {
 
-        Optional<User> user = userRepository.findById(1l);
+        System.out.println(principal.getName());
+
+        Optional<User> user = userRepository.findByUsername(principal.getName());
 
         User user1 = user.get();
 
@@ -76,10 +83,13 @@ public class StoreController {
     }
 
     @PostMapping("/cart")
-    public ResponseEntity<?> createAlbum(@RequestBody TitleDto album){
+    public ResponseEntity<?> createAlbumInCart(@RequestBody TitleDto album, Principal principal) {
 
 
-        Optional<User> user = userRepository.findById(1l);
+        System.out.println(principal.getName());
+
+        Optional<User> user = userRepository.findByUsername(principal.getName());
+        user.orElseThrow(() -> new UsernameNotFoundException("User not authenticated"));
 
         User user1 = user.get();
 

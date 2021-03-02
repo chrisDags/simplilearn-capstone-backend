@@ -110,11 +110,13 @@ public class CapstoneBackendApplication implements CommandLineRunner {
         User user = User.builder()
                 .username("chris")
                 .password(bCryptPasswordEncoder.encode("123"))
+                .roles("ROLE_USER")
                 .build();
 
         User user1 = User.builder()
                 .username("foo")
                 .password(bCryptPasswordEncoder.encode("123"))
+                .roles("ROLE_ADMIN")
                 .build();
 
         CartItem cartItem = CartItem.builder()

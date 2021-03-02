@@ -31,10 +31,5 @@ public class Album {
     @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY, mappedBy = "album", orphanRemoval = true)
     private List<Song> songs = new ArrayList<>();
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name= "cartItem_id")
-//    @JsonIgnore
-//    private CartItem cartItem;
-
 
 }
