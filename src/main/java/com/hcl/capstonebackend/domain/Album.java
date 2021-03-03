@@ -25,6 +25,7 @@ public class Album {
     private Long id;
     private String title;
     private String artist;
+    private String description;
     private Double price;
     private String genre;
     private String format;

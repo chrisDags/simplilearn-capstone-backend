@@ -1,5 +1,6 @@
 package com.hcl.capstonebackend.controller;
 
+import com.hcl.capstonebackend.dto.AlbumDto;
 import com.hcl.capstonebackend.dto.TitleDto;
 import com.hcl.capstonebackend.domain.Album;
 import com.hcl.capstonebackend.domain.CartItem;
@@ -107,4 +108,31 @@ public class StoreController {
         return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
+
+//    @PostMapping("/cart")
+//    public ResponseEntity<?> createAlbumInCart(@RequestBody AlbumDto albumDto, Principal principal) {
+//
+//
+//        System.out.println(principal.getName());
+//
+//        Optional<User> user = userRepository.findByUsername(principal.getName());
+//        user.orElseThrow(() -> new UsernameNotFoundException("User not authenticated"));
+//
+//        User user1 = user.get();
+//
+//        Album myAlbum = albumRepository.findByTitle(albumDto.getTitle());
+//
+//        System.out.println(myAlbum);
+//
+//
+//        CartItem cartItem = CartItem.builder()
+//                .user(user1)
+//                .album(myAlbum)
+//                .quantity(Long.valueOf(albumDto.getQuantity()))
+//                .build();
+//        cartItemRepository.save(cartItem);
+//
+//        return new ResponseEntity<>(HttpStatus.CREATED);
+//
+//    }
 }

@@ -46,6 +46,8 @@ public class CapstoneBackendApplication implements CommandLineRunner {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
 
+        String description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tempus libero a scelerisque " +
+                "sodales. Etiam efficitur dui felis, quis congue nunc luctus vel. Integer ante erat, tempus non efficitur.";
 
         Album album = Album.builder()
                 .artist("artist")
@@ -54,6 +56,7 @@ public class CapstoneBackendApplication implements CommandLineRunner {
                 .title("Title")
                 .format("CD")
                 .genre("Rock")
+                .description(description)
                 .build();
 
         Album album1 = Album.builder()
@@ -63,6 +66,7 @@ public class CapstoneBackendApplication implements CommandLineRunner {
                 .genre("Rap")
                 .title("Title 2")
                 .format("Vinyl")
+                .description(description)
                 .build();
 
         Album album2 = Album.builder()
@@ -72,6 +76,7 @@ public class CapstoneBackendApplication implements CommandLineRunner {
                 .genre("Rap 2")
                 .title("Title 3")
                 .format("Vinyl")
+                .description(description)
                 .build();
 
 
@@ -82,6 +87,7 @@ public class CapstoneBackendApplication implements CommandLineRunner {
                 .genre("Rap 2")
                 .title("Title 4")
                 .format("Vinyl")
+                .description(description)
                 .build();
 
 

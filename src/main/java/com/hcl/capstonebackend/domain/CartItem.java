@@ -20,6 +20,8 @@ public class CartItem {
     @JsonIgnore
     private Long id;
 
+    private Long quantity;
+
     @ManyToOne
     @JoinColumn(name = "album_id")
     private Album album;
