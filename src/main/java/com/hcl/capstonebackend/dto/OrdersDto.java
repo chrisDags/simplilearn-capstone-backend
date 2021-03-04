@@ -1,0 +1,23 @@
+package com.hcl.capstonebackend.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Date;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class OrdersDto {
+    private String name;
+    private String creditCardName;
+    private String creditCard;
+    private int cvv;
+    //turn this into a Date
+    private String expirationDate;
+    private String billingAddress;
+    private String shippingAddress;
+}
