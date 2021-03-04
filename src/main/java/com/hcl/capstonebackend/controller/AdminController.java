@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminController {
     //todo: admin specific URIs for editing/deleting store items
 
@@ -26,7 +27,6 @@ public class AdminController {
     @Autowired
     CartItemRepository cartItemRepository;
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/albums/{id}")
     public ResponseEntity<?> deleteAlbumById(@PathVariable Long id) {
 
@@ -36,18 +36,26 @@ public class AdminController {
 
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/albums/{id}")
-    public ResponseEntity<?> patchAlbumById(@PathVariable Long id){
+    public ResponseEntity<?> patchAlbumById(@PathVariable Long id, @RequestBody Album album){
 
         System.out.println("hit endpoint: " + id);
 
-        Optional<Album> album = albumRepository.findById(id);
+        //todo: check if it exists by id first
+        Optional<Album> album1 = albumRepository.findById(id);
 
-        Album album1 = album.get();
+        Album album2 = album1.get();
 
+        album2.setArtist(album.getArtist());
+        album2.setDescription(album.getDescription());
+        album2.setFormat(album.getFormat());
+        album2.setTitle(album.getTitle());
+        album2.setGenre(album.getGenre());
+        album2.setPrice(album.getPrice());
 
-        return null;
+        albumRepository.save(album2);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.hcl.capstonebackend.security;
 
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
@@ -14,7 +15,8 @@ import java.util.function.Function;
 public class JwtUtil {
 
     // todo: move this into properties file
-    private String SECRET_KEY = "SomeSecret";
+    @Value("${theSecret}")
+    private String SECRET_KEY;
 
     public String extractUsername(String token){
         return extractClaim(token, Claims::getSubject);

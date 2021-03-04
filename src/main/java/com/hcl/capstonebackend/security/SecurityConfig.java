@@ -13,7 +13,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -47,8 +46,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 //        http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and().authorizeRequests()
         http.csrf().disable().authorizeRequests()
-                .antMatchers("/authenticate", "/albums/**", "/loginme", "/h2-console/**").permitAll()
-                .antMatchers("/cart**").hasAnyRole("USER, ADMIN")
+                .antMatchers("/authenticate", "/albums/**", "/loginme", "/validate", "/h2-console/**").permitAll()
+                .antMatchers("/cart**", "/order").hasAnyRole("USER, ADMIN")
                 .antMatchers(HttpMethod.OPTIONS, "/**")
                 .permitAll()
                 .anyRequest()
