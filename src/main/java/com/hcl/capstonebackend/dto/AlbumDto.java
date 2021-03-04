@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class AlbumDto {
     private String title;
-    private String quantity;
+    private Long quantity;
 }

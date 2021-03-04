@@ -47,7 +47,7 @@ public class CapstoneBackendApplication implements CommandLineRunner {
 
 
         String description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tempus libero a scelerisque " +
-                "sodales. Etiam efficitur dui felis, quis congue nunc luctus vel. Integer ante erat, tempus non efficitur.";
+                "sodales. Etiam efficitur dui feli.";
 
         Album album = Album.builder()
                 .artist("artist")
@@ -56,6 +56,7 @@ public class CapstoneBackendApplication implements CommandLineRunner {
                 .title("Title")
                 .format("CD")
                 .genre("Rock")
+                .stock(90)
                 .description(description)
                 .build();
 
@@ -66,16 +67,18 @@ public class CapstoneBackendApplication implements CommandLineRunner {
                 .genre("Rap")
                 .title("Title 2")
                 .format("Vinyl")
+                .stock(5)
                 .description(description)
                 .build();
 
         Album album2 = Album.builder()
-                .artist("artist 2")
+                .artist("artist 3")
                 .price(50.00)
                 .releaseDate(new Date())
                 .genre("Rap 2")
                 .title("Title 3")
                 .format("Vinyl")
+                .stock(10)
                 .description(description)
                 .build();
 
@@ -87,6 +90,7 @@ public class CapstoneBackendApplication implements CommandLineRunner {
                 .genre("Rap 2")
                 .title("Title 4")
                 .format("Vinyl")
+                .stock(50)
                 .description(description)
                 .build();
 
@@ -125,20 +129,20 @@ public class CapstoneBackendApplication implements CommandLineRunner {
                 .roles("ROLE_ADMIN")
                 .build();
 
-        CartItem cartItem = CartItem.builder()
-                .album(album)
-                .user(user)
-                .build();
+//        CartItem cartItem = CartItem.builder()
+//                .album(album)
+//                .user(user)
+//                .build();
+//
+//        CartItem cartItem1 = CartItem.builder()
+//                .album(album)
+//                .user(user)
+//                .build();
 
-        CartItem cartItem1 = CartItem.builder()
-                .album(album)
-                .user(user)
-                .build();
-
-        CartItem cartItem2 = CartItem.builder()
-                .album(album)
-                .user(user1)
-                .build();
+//        CartItem cartItem2 = CartItem.builder()
+//                .album(album)
+//                .user(user1)
+//                .build();
 
         albumRepository.save(album);
         albumRepository.save(album1);
@@ -149,8 +153,8 @@ public class CapstoneBackendApplication implements CommandLineRunner {
         songRepository.save(song2);
         userRepository.save(user);
         userRepository.save(user1);
-        cartItemRepository.save(cartItem);
-        cartItemRepository.save(cartItem1);
-        cartItemRepository.save(cartItem2);
+//        cartItemRepository.save(cartItem);
+//        cartItemRepository.save(cartItem1);
+//        cartItemRepository.save(cartItem2);
     }
 }

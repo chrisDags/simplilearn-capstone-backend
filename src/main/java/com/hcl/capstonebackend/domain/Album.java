@@ -18,8 +18,6 @@ import java.util.List;
 @AllArgsConstructor
 public class Album {
 
-    //todo: add description (lorem ipsum) and seed them within the CommandLineRunner
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,6 +27,7 @@ public class Album {
     private Double price;
     private String genre;
     private String format;
+    private Integer stock;
     @Column(name = "release_data")
     private Date releaseDate;
 

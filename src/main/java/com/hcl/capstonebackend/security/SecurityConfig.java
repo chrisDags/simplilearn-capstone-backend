@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -42,14 +43,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     //todo: use the admin role for editing, adding, and deleting albums on the frontend
-    //.hasRole("USER").anyRequest()
-
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+//        http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and().authorizeRequests()
         http.csrf().disable().authorizeRequests()
-                .antMatchers("/authenticate", "/albums/**", "/loginme", "/h2-console/**")
-                .permitAll()
+                .antMatchers("/authenticate", "/albums/**", "/loginme", "/h2-console/**").permitAll()
+                .antMatchers("/cart**").hasAnyRole("USER, ADMIN")
                 .antMatchers(HttpMethod.OPTIONS, "/**")
                 .permitAll()
                 .anyRequest()
@@ -62,5 +61,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
+
 
 }

@@ -17,14 +17,15 @@ public class CartItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     private Long id;
 
     private Long quantity;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "album_id")
     private Album album;
+
+//    Long productId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -1,10 +1,9 @@
 package com.hcl.capstonebackend.controller;
 
-import com.hcl.capstonebackend.dto.AlbumDto;
-import com.hcl.capstonebackend.dto.TitleDto;
 import com.hcl.capstonebackend.domain.Album;
 import com.hcl.capstonebackend.domain.CartItem;
 import com.hcl.capstonebackend.domain.User;
+import com.hcl.capstonebackend.dto.AlbumDto;
 import com.hcl.capstonebackend.dto.UserDto;
 import com.hcl.capstonebackend.repository.AlbumRepository;
 import com.hcl.capstonebackend.repository.CartItemRepository;
@@ -22,7 +21,10 @@ import java.util.Optional;
 
 
 /*
-    todo:  All of this is going to be refactored with all the business logic in their own services
+    todo:
+     All of this is going to be refactored with all the business logic in their own services, URIs will be changed to
+     start with api/v1/
+
  */
 
 @CrossOrigin
@@ -84,10 +86,12 @@ public class StoreController {
     }
 
     @PostMapping("/cart")
-    public ResponseEntity<?> createAlbumInCart(@RequestBody TitleDto album, Principal principal) {
+    public ResponseEntity<?> createAlbumInCart(@RequestBody AlbumDto album, Principal principal) {
 
 
         System.out.println(principal.getName());
+        System.out.println(album.getQuantity());
+
 
         Optional<User> user = userRepository.findByUsername(principal.getName());
         user.orElseThrow(() -> new UsernameNotFoundException("User not authenticated"));
@@ -102,12 +106,31 @@ public class StoreController {
         CartItem cartItem = CartItem.builder()
                 .user(user1)
                 .album(myAlbum)
+                .quantity(album.getQuantity())
                 .build();
         cartItemRepository.save(cartItem);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
+
+    @DeleteMapping("/cart/{id}")
+    public ResponseEntity<?> deleteAlbumFromCart(@PathVariable Long id){
+
+        cartItemRepository.deleteById(id);
+
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/albums/test/{id}")
+    public ResponseEntity<?> getAlbumById(@PathVariable Long id){
+
+        Optional<Album> album = albumRepository.findById(id);
+        Album album1 = album.get();
+        System.out.println(album1.getTitle());
+        return new ResponseEntity<>(album1, HttpStatus.OK);
+    }
+
 
 //    @PostMapping("/cart")
 //    public ResponseEntity<?> createAlbumInCart(@RequestBody AlbumDto albumDto, Principal principal) {
