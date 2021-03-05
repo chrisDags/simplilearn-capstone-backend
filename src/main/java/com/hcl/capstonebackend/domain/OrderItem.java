@@ -1,26 +1,30 @@
 package com.hcl.capstonebackend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.LinkedList;
-import java.util.List;
+import java.math.BigDecimal;
 
 @Entity
-@Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Cart {
-
+@Builder
+@Data
+public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String title;
+    private Long quantity;
+    private BigDecimal price;
 
-    @OneToMany(cascade = CascadeType.REFRESH, mappedBy = "cart")
-    private List<CartItem> cartItems = new LinkedList<>();
+    @ManyToOne
+    @JoinColumn(name = "orders_id")
+    @JsonIgnore
+    private Orders orders;
 
 }

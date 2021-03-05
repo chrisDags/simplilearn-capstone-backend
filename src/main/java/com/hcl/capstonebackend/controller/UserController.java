@@ -1,9 +1,14 @@
 package com.hcl.capstonebackend.controller;
 
+import com.hcl.capstonebackend.domain.OrderItem;
 import com.hcl.capstonebackend.domain.Orders;
+import com.hcl.capstonebackend.domain.User;
+import com.hcl.capstonebackend.dto.OrderItemDto;
 import com.hcl.capstonebackend.dto.OrdersDto;
 import com.hcl.capstonebackend.dto.UserDto;
+import com.hcl.capstonebackend.repository.OrderItemRepository;
 import com.hcl.capstonebackend.repository.OrdersRepository;
+import com.hcl.capstonebackend.repository.UserRepository;
 import com.hcl.capstonebackend.security.AuthenticationRequest;
 import com.hcl.capstonebackend.security.AuthenticationResponse;
 import com.hcl.capstonebackend.security.JwtUtil;
@@ -22,6 +27,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -37,6 +43,14 @@ public class UserController {
 
     @Autowired
     private OrdersRepository ordersRepository;
+
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+
 
     @PostMapping(value = "/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
@@ -78,7 +92,12 @@ public class UserController {
 
 
     @PostMapping("/order")
-    public ResponseEntity<?> placeOrder(@RequestBody OrdersDto ordersDto){
+    public ResponseEntity<?> placeOrder(@RequestBody OrdersDto ordersDto, Principal principal){
+
+
+        Optional<User> user = userRepository.findByUsername(principal.getName());
+
+        User user1 = user.get();
 
         Orders orders = Orders.builder()
                 .billingAddress(ordersDto.getBillingAddress())
@@ -89,7 +108,8 @@ public class UserController {
                 .shippingAddress(ordersDto.getShippingAddress())
                 .billingAddress(ordersDto.getBillingAddress())
                 .total(ordersDto.getTotal())
-                .albumNames(ordersDto.getAlbumNames())
+                .user(user1)
+//                .albumNames(ordersDto.getAlbumNames())
                 .build();
 
         System.out.println("order made");
@@ -98,6 +118,41 @@ public class UserController {
 
         return new ResponseEntity<>(orders, HttpStatus.CREATED);
 
+    }
+
+    @PostMapping("/order/item")
+    public ResponseEntity<?> createOrderItem(@RequestBody OrderItemDto orderItem, Principal principal){
+
+//        System.out.println(orderItem.getOrders().getId());
+
+        Optional<User> user = userRepository.findByUsername(principal.getName());
+        User user1 = user.get();
+
+
+        Optional<Orders> orders = ordersRepository.findById(orderItem.getId());
+
+        Orders orders1 = orders.get();
+
+        //Orders orders1 = orders.get();
+
+        OrderItem orderItem1 = OrderItem.builder()
+                .quantity(orderItem.getQuantity())
+                .price(orderItem.getPrice())
+                .title(orderItem.getTitle())
+                .orders(orders1)
+                .build();
+
+//        OrderItem orderItem1 = OrderItem.builder()
+//                .quantity(orderItemDto.getOrderItem(.getQuantity())
+//                .price(orderItemDto.getOrderItem().getPrice())
+//                .title(orderItemDto.getOrderItem().getTitle())
+//                .orders(orderItemDto.getOrders())
+//                .build();
+        System.out.println(orderItem1.toString());
+
+        orderItemRepository.save(orderItem1);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/order")

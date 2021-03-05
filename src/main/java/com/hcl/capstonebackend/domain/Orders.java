@@ -2,10 +2,7 @@ package com.hcl.capstonebackend.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hcl.capstonebackend.dto.CartDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Cache;
 
 import javax.persistence.*;
@@ -15,7 +12,8 @@ import java.util.List;
 
 //todo
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -34,10 +32,15 @@ public class Orders {
     @Column(name = "shipping_address")
     private String shippingAddress;
 
-    @ElementCollection
-    private List<String> albumNames;
-
     private BigDecimal total;
+
+    @OneToMany(cascade = CascadeType.REFRESH, mappedBy = "orders")
+    private List<OrderItem> orderItems;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
 
 
 }

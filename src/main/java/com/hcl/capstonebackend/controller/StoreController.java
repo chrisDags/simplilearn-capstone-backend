@@ -122,6 +122,11 @@ public class StoreController {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
+    @DeleteMapping("/cart")
+    public ResponseEntity<?> deleteCart(Principal principal){
+        return null;
+    }
+
     @GetMapping("/albums/test/{id}")
     public ResponseEntity<?> getAlbumById(@PathVariable Long id){
 

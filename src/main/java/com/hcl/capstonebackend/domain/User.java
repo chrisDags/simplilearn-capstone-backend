@@ -1,5 +1,6 @@
 package com.hcl.capstonebackend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,8 +29,12 @@ public class User {
 //    @OneToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "user")
 //    private List<Cart> carts = new LinkedList<>();
 
-    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.REFRESH, mappedBy = "user")
     private List<CartItem> cartItemList = new LinkedList<>();
+
+    @OneToMany(cascade = CascadeType.REFRESH, mappedBy = "user")
+    @JsonIgnore
+    private List<Orders> ordersList = new LinkedList<>();
 }
 
 

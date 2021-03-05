@@ -22,7 +22,7 @@ public class CartItem {
 
     private Long quantity;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "album_id")
     private Album album;
 
@@ -32,8 +32,13 @@ public class CartItem {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "orders_id")
+    @JoinColumn(name = "cart_id")
     @JsonIgnore
-    private Orders orders;
+    private Cart cart;
+
+//    @ManyToOne
+//    @JoinColumn(name = "orders_id")
+//    @JsonIgnore
+//    private Orders orders;
 
 }
