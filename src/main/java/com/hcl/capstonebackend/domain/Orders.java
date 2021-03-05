@@ -1,5 +1,7 @@
 package com.hcl.capstonebackend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hcl.capstonebackend.dto.CartDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +11,7 @@ import org.hibernate.annotations.Cache;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 //todo
 @Entity
@@ -30,5 +33,11 @@ public class Orders {
     private String billingAddress;
     @Column(name = "shipping_address")
     private String shippingAddress;
+
+    @ElementCollection
+    private List<String> albumNames;
+
+    private BigDecimal total;
+
 
 }

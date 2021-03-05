@@ -8,6 +8,7 @@ import com.hcl.capstonebackend.security.AuthenticationRequest;
 import com.hcl.capstonebackend.security.AuthenticationResponse;
 import com.hcl.capstonebackend.security.JwtUtil;
 import com.hcl.capstonebackend.security.UserDetailsServiceImpl;
+import org.apache.tomcat.util.http.parser.HttpParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -87,12 +88,22 @@ public class UserController {
                 .expirationDate(ordersDto.getExpirationDate())
                 .shippingAddress(ordersDto.getShippingAddress())
                 .billingAddress(ordersDto.getBillingAddress())
+                .total(ordersDto.getTotal())
+                .albumNames(ordersDto.getAlbumNames())
                 .build();
+
+        System.out.println("order made");
 
         ordersRepository.save(orders);
 
         return new ResponseEntity<>(orders, HttpStatus.CREATED);
 
+    }
+
+    @GetMapping("/order")
+    public ResponseEntity<?> getOrder(){
+
+        return new ResponseEntity<>(ordersRepository.findAll(), HttpStatus.OK);
     }
 
 

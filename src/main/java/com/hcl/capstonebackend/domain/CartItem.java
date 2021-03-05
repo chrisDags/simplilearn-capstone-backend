@@ -2,6 +2,7 @@ package com.hcl.capstonebackend.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.springframework.core.annotation.Order;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -25,11 +26,14 @@ public class CartItem {
     @JoinColumn(name = "album_id")
     private Album album;
 
-//    Long productId;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "orders_id")
+    @JsonIgnore
+    private Orders orders;
 
 }
