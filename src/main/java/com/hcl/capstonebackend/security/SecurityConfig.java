@@ -44,10 +44,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //todo: use the admin role
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and().authorizeRequests()
         http.csrf().disable().authorizeRequests()
                 .antMatchers("/authenticate", "/albums/**", "/loginme", "/validate", "/h2-console/**").permitAll()
-                .antMatchers("/cart**", "/order").hasAnyRole("USER, ADMIN")
+                .antMatchers("/cart/{\\d+}","/cart**","/order").hasAnyRole("USER, ADMIN")
                 .antMatchers(HttpMethod.OPTIONS, "/**")
                 .permitAll()
                 .anyRequest()

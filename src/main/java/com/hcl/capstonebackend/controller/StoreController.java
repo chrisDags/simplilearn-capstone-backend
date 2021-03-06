@@ -1,8 +1,9 @@
 package com.hcl.capstonebackend.controller;
 
+import com.hcl.capstonebackend.Service.StoreService;
 import com.hcl.capstonebackend.domain.Album;
+import com.hcl.capstonebackend.domain.Cart;
 import com.hcl.capstonebackend.domain.CartItem;
-import com.hcl.capstonebackend.domain.User;
 import com.hcl.capstonebackend.dto.AlbumDto;
 import com.hcl.capstonebackend.dto.UserDto;
 import com.hcl.capstonebackend.repository.AlbumRepository;
@@ -11,7 +12,6 @@ import com.hcl.capstonebackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -19,13 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
-/*
-    todo:
-     All of this is going to be refactored with all the business logic in their own services, URIs will be changed to
-     start with api/v1/
-
- */
 
 @CrossOrigin
 @RestController
@@ -40,13 +33,16 @@ public class StoreController {
     CartItemRepository cartItemRepository;
 
 
+    @Autowired
+    StoreService storeService;
+
+
     @GetMapping("/albums")
     public Iterable<Album> getAllAlbums() {
         return albumRepository.findAll();
     }
 
 
-    //todo: either handle this on the frontend or find a cleaner way here
     @GetMapping("/albums/{name}")
     public Iterable<Album> getAlbumByTitle(@PathVariable String name) {
         Iterable<Album> albums = albumRepository.findAll();
@@ -64,8 +60,7 @@ public class StoreController {
     @PostMapping("/loginme")
     ResponseEntity<?> userLogin(@RequestBody UserDto userDto) {
 
-        System.out.println(userDto.getUsername());
-        boolean result = userRepository.existsUsersByUsername(userDto.getUsername());
+        boolean result = storeService.userExists(userDto);
 
         if (result)
             return new ResponseEntity<>(HttpStatus.OK);
@@ -76,39 +71,23 @@ public class StoreController {
     @GetMapping("/cart")
     public ResponseEntity<?> getAllInCart(Principal principal) {
 
-        System.out.println(principal.getName());
+        return ResponseEntity.ok(storeService.retrieveAllInCart(principal));
+    }
 
-        Optional<User> user = userRepository.findByUsername(principal.getName());
+    @GetMapping("/cart/{id}")
+    public ResponseEntity<?> getCartItem(@PathVariable Long id){
 
-        User user1 = user.get();
+        Optional<CartItem> cartItem = cartItemRepository.findById(id);
 
-        return ResponseEntity.ok(cartItemRepository.findAllByUser(user1));
+        CartItem cartItem1 = cartItem.get();
+
+        return new ResponseEntity<>(cartItem1, HttpStatus.OK);
     }
 
     @PostMapping("/cart")
     public ResponseEntity<?> createAlbumInCart(@RequestBody AlbumDto album, Principal principal) {
 
-
-        System.out.println(principal.getName());
-        System.out.println(album.getQuantity());
-
-
-        Optional<User> user = userRepository.findByUsername(principal.getName());
-        user.orElseThrow(() -> new UsernameNotFoundException("User not authenticated"));
-
-        User user1 = user.get();
-
-        Album myAlbum = albumRepository.findByTitle(album.getTitle());
-
-        System.out.println(myAlbum);
-
-
-        CartItem cartItem = CartItem.builder()
-                .user(user1)
-                .album(myAlbum)
-                .quantity(album.getQuantity())
-                .build();
-        cartItemRepository.save(cartItem);
+        storeService.saveAlbumInCart(album, principal);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
 
@@ -117,7 +96,7 @@ public class StoreController {
     @DeleteMapping("/cart/{id}")
     public ResponseEntity<?> deleteAlbumFromCart(@PathVariable Long id){
 
-        cartItemRepository.deleteById(id);
+        storeService.removeAlbumFromCart(id);
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
@@ -130,37 +109,26 @@ public class StoreController {
     @GetMapping("/albums/test/{id}")
     public ResponseEntity<?> getAlbumById(@PathVariable Long id){
 
-        Optional<Album> album = albumRepository.findById(id);
-        Album album1 = album.get();
-        System.out.println(album1.getTitle());
-        return new ResponseEntity<>(album1, HttpStatus.OK);
+        return new ResponseEntity<>(storeService.retrieveAlbumById(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/cart/{id}")
+    public ResponseEntity<?> updateQuantity(@PathVariable Long id, String quantity,  Principal principal){
+
+        if(!cartItemRepository.existsById(id)){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<CartItem> cartItem = cartItemRepository.findById(id);
+
+        CartItem cartItem1 = cartItem.get();
+
+        cartItem1.setQuantity(Long.valueOf(quantity));
+
+        cartItemRepository.save(cartItem1);
+
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
 
-//    @PostMapping("/cart")
-//    public ResponseEntity<?> createAlbumInCart(@RequestBody AlbumDto albumDto, Principal principal) {
-//
-//
-//        System.out.println(principal.getName());
-//
-//        Optional<User> user = userRepository.findByUsername(principal.getName());
-//        user.orElseThrow(() -> new UsernameNotFoundException("User not authenticated"));
-//
-//        User user1 = user.get();
-//
-//        Album myAlbum = albumRepository.findByTitle(albumDto.getTitle());
-//
-//        System.out.println(myAlbum);
-//
-//
-//        CartItem cartItem = CartItem.builder()
-//                .user(user1)
-//                .album(myAlbum)
-//                .quantity(Long.valueOf(albumDto.getQuantity()))
-//                .build();
-//        cartItemRepository.save(cartItem);
-//
-//        return new ResponseEntity<>(HttpStatus.CREATED);
-//
-//    }
 }

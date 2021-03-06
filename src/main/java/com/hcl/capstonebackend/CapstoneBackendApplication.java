@@ -129,21 +129,6 @@ public class CapstoneBackendApplication implements CommandLineRunner {
                 .roles("ROLE_ADMIN")
                 .build();
 
-//        CartItem cartItem = CartItem.builder()
-//                .album(album)
-//                .user(user)
-//                .build();
-//
-//        CartItem cartItem1 = CartItem.builder()
-//                .album(album)
-//                .user(user)
-//                .build();
-
-//        CartItem cartItem2 = CartItem.builder()
-//                .album(album)
-//                .user(user1)
-//                .build();
-
         albumRepository.save(album);
         albumRepository.save(album1);
         albumRepository.save(album2);
@@ -153,8 +138,6 @@ public class CapstoneBackendApplication implements CommandLineRunner {
         songRepository.save(song2);
         userRepository.save(user);
         userRepository.save(user1);
-//        cartItemRepository.save(cartItem);
-//        cartItemRepository.save(cartItem1);
-//        cartItemRepository.save(cartItem2);
+
     }
 }

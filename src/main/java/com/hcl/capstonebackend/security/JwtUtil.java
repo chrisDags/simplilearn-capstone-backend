@@ -14,7 +14,6 @@ import java.util.function.Function;
 @Service
 public class JwtUtil {
 
-    // todo: move this into properties file
     @Value("${theSecret}")
     private String SECRET_KEY;
 

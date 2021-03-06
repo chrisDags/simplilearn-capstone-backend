@@ -29,10 +29,6 @@ public class Album {
     private String format;
     private Integer stock;
 
-    //todo: commented out for now until I bring in the 'Moment' page on React
-//    @Column(name = "release_data")
-//    private Date releaseDate;
-
     @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY, mappedBy = "album", orphanRemoval = true)
     private List<Song> songs = new ArrayList<>();
 

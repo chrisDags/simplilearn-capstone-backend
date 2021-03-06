@@ -1,16 +1,12 @@
 package com.hcl.capstonebackend.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hcl.capstonebackend.dto.CartDto;
 import lombok.*;
-import org.hibernate.annotations.Cache;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
-//todo
 @Entity
 @Getter
 @Setter

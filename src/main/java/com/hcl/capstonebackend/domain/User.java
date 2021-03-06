@@ -26,9 +26,6 @@ public class User {
     private String password;
     private String roles;
 
-//    @OneToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "user")
-//    private List<Cart> carts = new LinkedList<>();
-
     @OneToMany(cascade = CascadeType.REFRESH, mappedBy = "user")
     private List<CartItem> cartItemList = new LinkedList<>();
 
