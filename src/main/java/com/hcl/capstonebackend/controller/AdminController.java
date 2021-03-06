@@ -39,9 +39,6 @@ public class AdminController {
     @PutMapping("/albums/{id}")
     public ResponseEntity<?> patchAlbumById(@PathVariable Long id, @RequestBody Album album){
 
-        System.out.println("hit endpoint: " + id);
-
-        //todo: check if it exists by id first
         Optional<Album> album1 = albumRepository.findById(id);
 
         Album album2 = album1.get();
