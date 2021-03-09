@@ -1,16 +1,19 @@
 package com.hcl.capstonebackend.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hcl.capstonebackend.Service.StoreService;
 import com.hcl.capstonebackend.domain.Album;
 import com.hcl.capstonebackend.domain.Cart;
 import com.hcl.capstonebackend.domain.CartItem;
 import com.hcl.capstonebackend.domain.Song;
 import com.hcl.capstonebackend.dto.AlbumDto;
+import com.hcl.capstonebackend.dto.CartDto;
 import com.hcl.capstonebackend.dto.UserDto;
 import com.hcl.capstonebackend.repository.AlbumRepository;
 import com.hcl.capstonebackend.repository.CartItemRepository;
 import com.hcl.capstonebackend.repository.SongRepository;
 import com.hcl.capstonebackend.repository.UserRepository;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -103,6 +106,27 @@ public class StoreController {
 
     }
 
+    @SneakyThrows
+    @PutMapping("/cart/{id}")
+    public ResponseEntity<?> updateCartQuantity(@PathVariable String id, @RequestBody CartDto cartDto){
+
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        Long str = objectMapper.readValue(quantity, Long.class);
+//
+//        System.out.println(id);
+//        System.out.println("this was hit!");
+//        Optional<CartItem> cartItem = cartItemRepository.findById(Long.valueOf(id));
+//        CartItem cartItem1 = cartItem.get();
+//
+//        cartItem1.setQuantity(Long.valueOf(cartDto.getQuantity()));
+//
+//
+//        cartItemRepository.save(cartItem1);
+        storeService.updateCartItemQuantity(id, cartDto);
+
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
     @DeleteMapping("/cart/{id}")
     public ResponseEntity<?> deleteAlbumFromCart(@PathVariable Long id){
 
@@ -121,24 +145,5 @@ public class StoreController {
 
         return new ResponseEntity<>(storeService.retrieveAlbumById(id), HttpStatus.OK);
     }
-
-    @PutMapping("/cart/{id}")
-    public ResponseEntity<?> updateQuantity(@PathVariable Long id, String quantity,  Principal principal){
-
-        if(!cartItemRepository.existsById(id)){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        Optional<CartItem> cartItem = cartItemRepository.findById(id);
-
-        CartItem cartItem1 = cartItem.get();
-
-        cartItem1.setQuantity(Long.valueOf(quantity));
-
-        cartItemRepository.save(cartItem1);
-
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
-
 
 }

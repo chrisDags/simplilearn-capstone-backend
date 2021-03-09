@@ -1,15 +1,18 @@
 package com.hcl.capstonebackend.Service;
 
+import com.fasterxml.jackson.databind.exc.InvalidTypeIdException;
 import com.hcl.capstonebackend.domain.Album;
 import com.hcl.capstonebackend.domain.CartItem;
 import com.hcl.capstonebackend.domain.Song;
 import com.hcl.capstonebackend.domain.User;
 import com.hcl.capstonebackend.dto.AlbumDto;
+import com.hcl.capstonebackend.dto.CartDto;
 import com.hcl.capstonebackend.dto.UserDto;
 import com.hcl.capstonebackend.repository.AlbumRepository;
 import com.hcl.capstonebackend.repository.CartItemRepository;
 import com.hcl.capstonebackend.repository.SongRepository;
 import com.hcl.capstonebackend.repository.UserRepository;
+import com.sun.jdi.InvalidTypeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -32,10 +35,22 @@ public class StoreService {
     @Autowired
     SongRepository songRepository;
 
+
+
+    public void updateCartItemQuantity(String id, CartDto cartDto){
+        Optional<CartItem> cartItem = cartItemRepository.findById(Long.valueOf(id));
+        cartItem.orElseThrow(() -> new RuntimeException("Invalid id"));
+
+        CartItem cartItem1 = cartItem.get();
+
+        cartItem1.setQuantity(Long.valueOf(cartDto.getQuantity()));
+
+        cartItemRepository.save(cartItem1);
+    }
+
     public List<Song> retrieveSongsByAlbumId(Long id){
         return songRepository.getAllByAlbum_Id(id);
     }
-
 
     public boolean userExists(UserDto userDto){
         return  userRepository.existsUsersByUsername(userDto.getUsername());
