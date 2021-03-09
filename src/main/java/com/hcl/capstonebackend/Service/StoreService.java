@@ -2,17 +2,20 @@ package com.hcl.capstonebackend.Service;
 
 import com.hcl.capstonebackend.domain.Album;
 import com.hcl.capstonebackend.domain.CartItem;
+import com.hcl.capstonebackend.domain.Song;
 import com.hcl.capstonebackend.domain.User;
 import com.hcl.capstonebackend.dto.AlbumDto;
 import com.hcl.capstonebackend.dto.UserDto;
 import com.hcl.capstonebackend.repository.AlbumRepository;
 import com.hcl.capstonebackend.repository.CartItemRepository;
+import com.hcl.capstonebackend.repository.SongRepository;
 import com.hcl.capstonebackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,6 +28,13 @@ public class StoreService {
 
     @Autowired
     CartItemRepository cartItemRepository;
+
+    @Autowired
+    SongRepository songRepository;
+
+    public List<Song> retrieveSongsByAlbumId(Long id){
+        return songRepository.getAllByAlbum_Id(id);
+    }
 
 
     public boolean userExists(UserDto userDto){

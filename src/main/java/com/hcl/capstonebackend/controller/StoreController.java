@@ -4,10 +4,12 @@ import com.hcl.capstonebackend.Service.StoreService;
 import com.hcl.capstonebackend.domain.Album;
 import com.hcl.capstonebackend.domain.Cart;
 import com.hcl.capstonebackend.domain.CartItem;
+import com.hcl.capstonebackend.domain.Song;
 import com.hcl.capstonebackend.dto.AlbumDto;
 import com.hcl.capstonebackend.dto.UserDto;
 import com.hcl.capstonebackend.repository.AlbumRepository;
 import com.hcl.capstonebackend.repository.CartItemRepository;
+import com.hcl.capstonebackend.repository.SongRepository;
 import com.hcl.capstonebackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,9 @@ public class StoreController {
     @Autowired
     CartItemRepository cartItemRepository;
 
+    @Autowired
+    SongRepository songRepository;
+
 
     @Autowired
     StoreService storeService;
@@ -40,6 +45,11 @@ public class StoreController {
     @GetMapping("/albums")
     public Iterable<Album> getAllAlbums() {
         return albumRepository.findAll();
+    }
+
+    @GetMapping("/albums/songs/{albumId}")
+    public List<Song> getAllSongs(@PathVariable String albumId){
+        return storeService.retrieveSongsByAlbumId(Long.valueOf(albumId));
     }
 
 
